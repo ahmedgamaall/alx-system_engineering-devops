@@ -1,2 +1,2 @@
 #!/bin/bash
-chmown -hR vincent:staff .
+chown -hR vincent:staff .

@@ -1,4 +1,4 @@
-r/bin/env bash
+#!/usr/bin/env bash
 file { '/etc/ssh/ssh_config':
         ensure => present,
 content => "

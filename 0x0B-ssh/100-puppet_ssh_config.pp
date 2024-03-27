@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
 file { '/etc/ssh/ssh_config':
         ensure => present,
-content => "
-Include /etc/ssh/ssh_config.d/*.conf
-Host *
-    IdentityFile ~/.ssh/school
-    passwordAuthentication no
-",
-  mode    => '0644',
+}
+file_line { 'Turn off password auth':
+  path    => '/etc/ssh/ssh_config',
+  line    => 'passwordAuthentication no',
+  match   => '^#passwordAuthentication',
 }

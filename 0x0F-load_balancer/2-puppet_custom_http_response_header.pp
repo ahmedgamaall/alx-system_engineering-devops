@@ -1,44 +1,28 @@
-package{ 'nginx':
-  ensure => 'installed',
+
+exec { 'update system':
+        command => '/usr/bin/apt-get update',
 }
 
-service{ 'nginx':
-  ensure => 'running',
-  enable => 'true',
-}
-
-file{'/etc/nginx/sites-available/default':
-  ensure  => 'file',
-  content => "server {
-    listen 80 default_server;
-    listen [::]:80 default_server ipv6only=on;
-    add_header X-Served-By ${hostname};
-    root /var/www/html;
-    index index.html index.htm;
-    server_name localhost;
-    error_page 404 /404.html;
-    location / {
-        try_files \$uri \$uri/ =404;
-    }
-
-    location /redirect_me {
-        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
-    }
-}",
-  require => Package['nginx'],
-  notify  => Service['nginx'],
-  replace => 'true',
+package { 'nginx':
+	ensure => 'installed',
+	require => Exec['update system']
 }
 
 file {'/var/www/html/index.html':
-  ensure  => 'file',
-  content => 'Hello World!',
-  require => Package['nginx'],
-  notify  => Service['nginx'],
-  }
+	content => 'Hello World!'
+}
 
-file {'/var/www/html/404.html':
-  ensure  => 'file',
-  content => "Ceci n'est pas une page",
-  require => Package['nginx'],
-  notify  => Service['nginx'],}
+exec {'redirect_me':
+	command => 'sed -i "24i\	rewrite ^/redirect_me https://th3-gr00t.tk/ permanent;" /etc/nginx/sites-available/default',
+	provider => 'shell'
+}
+
+exec {'HTTP header':
+	command => 'sed -i "25i\	add_header X-Served-By \$hostname;" /etc/nginx/sites-available/default',
+	provider => 'shell'
+}
+
+service {'nginx':
+	ensure => running,
+	require => Package['nginx']
+}

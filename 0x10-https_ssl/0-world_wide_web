@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+if [ $# -eq 2 ]; then
+	my_ip_address=$(dig $2.$1 | awk '/ANSWER SECTION/ {getline; print $5}')
+	record_type_for_ip=$(dig $2.$1 | awk '/ANSWER SECTION/ {getline; print $4}')
+	echo "The subdomain $2 is a $record_type_for_ip record and points to $my_ip_address"
+elif [ $# -eq 1 ]; then
+	declare all_subdomains=('www' 'lb-01' 'web-01' 'web-02')
+	for subdomain in ${all_subdomains[@]}; do
+		my_ip_address=$(dig $subdomain.$1 | awk '/ANSWER SECTION/ {getline; print $5}')
+		record_type_for_ip=$(dig $subdomain.$1 | awk '/ANSWER SECTION/ {getline; print $4}')
+		echo "The subdomain $subdomain is a $record_type_for_ip record and points to $my_ip_address"
+	done
+fi

@@ -1,0 +1,11 @@
+frontend lb-01
+    bind *:80
+    bind *:443 ssl crt /home/ubuntu/haproxy.pem
+    mode http
+    default_backend webservers
+
+backend webservers
+    mode http
+    balance roundrobin
+    server 206447-web-01 52.3.243.117:80
+    server 206447-web-02 34.224.6.195:80

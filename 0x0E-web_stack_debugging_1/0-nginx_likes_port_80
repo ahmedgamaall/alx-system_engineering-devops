@@ -1,4 +1,19 @@
 #!/usr/bin/env bash
 
-sudo ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
-sudo service nginx restart
+systemctl status nginx >/dev/null 2>&1 || sudo systemctl start nginx
+
+grep -iE '^listen\s+[^:#]+' /etc/nginx/nginx.conf | grep -vE '^\s*#|^;|\s*localhost' > /tmp/listen_portsng.txt
+
+if [[ $(cat /tmp/nginx_listen_ports.txt | wc -l) -eq 0 ]]; then
+  echo "No existing listen directives found"
+  exit 0
+fi
+
+if grep -q ':80$' /tmp/nginx_listen_ports.txt; then
+  echo "already listen on port 80."
+  exit 0
+fi
+sudo sed -i '/http {$/a\    listen 80 default_server;  \n' /etc/nginx/nginx.conf
+
+sudo systemctl restart nginx
+rm /tmp/listen_portsng.txt

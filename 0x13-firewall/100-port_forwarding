@@ -1,9 +1,11 @@
 #
 # rules.before
+
 *nat
 :PREROUTING ACCEPT [0:0]
 -A PREROUTING -p tcp --dport 8080 -j REDIRECT --to-port 80
 COMMIT
+
 #
 # Rules that should be run before the ufw command line added rules. Custom
 # rules should be added to one of these chains:

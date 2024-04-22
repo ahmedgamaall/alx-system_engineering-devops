@@ -15,7 +15,8 @@ if __name__ == '__main__':
     for employee in employees:
         employee_id = employee.get('id')
         employee_username = employee.get('username')
-        rest_api = 'https://jsonplaceholder.typicode.com/users/{}'.format(employee_id)
+        rest_api = 'https://jsonplaceholder.typicode.com/users/{}'.format(
+            employee_id)
         rest_api = rest_api + '/todos/'
         requests_data = requests.get(rest_api)
 

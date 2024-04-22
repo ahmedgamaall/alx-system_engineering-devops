@@ -12,11 +12,15 @@ if __name__ == '__main__':
     if len(argv) > 1:
         if re.fullmatch(r'\d+', argv[1]):
             employee_id = int(argv[1])
-            data_request = requests.get('{}/users/{}'.format(rest_api, employee_id)).json()
-            tasks_request = requests.get('{}/todos'.format(rest_api)).json()
+            data_request = requests.get('{}/users/{}'.format(
+                rest_api, employee_id)).json()
+            tasks_request = requests.get('{}/todos'.format(
+                rest_api)).json()
             employee_name = data_request.get('name')
-            tasks = list(filter(lambda t: t.get('userId') == employee_id, tasks_request))
-            completed_list_tasks = list(filter(lambda a: a.get('completed'), tasks))
+            tasks = list(filter(
+                lambda t: t.get('userId') == employee_id, tasks_request))
+            completed_list_tasks = list(
+                filter(lambda a: a.get('completed'), tasks))
             print(
                 'Employee {} is done with tasks({}/{}):'.format(
                     employee_name,

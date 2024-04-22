@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """Using what you did in the task #0,
-extend your Python script to export data in the CSV format."""
+extend your Python script to export data in the JSON format."""
 
 import json
 import requests
@@ -14,25 +14,23 @@ if __name__ == "__main__":
         exit()
 
     rest_api = 'https://jsonplaceholder.typicode.com'
-
-    one_employee = requests.get('{}/users/{}'.format(
-        rest_api, employee_id)).json()
-    if one_employee == {}:
+    employee_data = requests.get(f'{rest_api}/users/{employee_id}').json()
+    if employee_data == {}:
         exit()
-    username_employee = one_employee.get('username')
+    employee_username = employee_data.get('username')
 
-    tasks = requests.get('{}/todos'.format(rest_api)).json()
+    tasks_list = requests.get(f'{rest_api}/todos').json()
 
-    employee_tasks = []
-    employee_task_dict = {}
+    employee_tasks_list = []
+    employee_user_task = {}
 
-    for task in tasks:
+    for task in tasks_list:
         if task.get('userId') == employee_id:
-            employee_tasks.append({
+            employee_tasks_list.append({
                 "task": task.get('title'),
                 "completed": task.get('completed'),
-                "username": username_employee,
+                "username": employee_username,
             })
-    employee_task_dict["{}".format(employee_id)] = employee_tasks
-    with open("{}.json".format(employee_id), "w") as file:
-        json.dump(employee_task_dict, file)
+    employee_user_task[f"{employee_id}"] = employee_tasks_list
+    with open(f"{employee_id}.json", "w") as outfile:
+        json.dump(employee_user_task, outfile)

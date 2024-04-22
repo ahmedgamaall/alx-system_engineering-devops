@@ -1,37 +1,25 @@
 #!/usr/bin/python3
 """Using what you did in the task #0,
-extend your Python script to export data in the CSV format."""
-
+extend your Python script to export data in the CSV format"""
 import csv
 import requests
 from sys import argv
 
-if __name__ == "__main__":
-    try:
-        employee_id = int(argv[1])
-    except Exception as a:
-        exit()
+if __name__ == '__main__':
+    user = argv[1]
+    rest_api__user = 'https://jsonplaceholder.typicode.com/users/' + user
+    data_request = requests.get(rest_api__user)
 
-    rest_api = 'https://jsonplaceholder.typicode.com'
+    employee_id = data_request.json().get('username')
+    task = rest_api__user + '/todos'
+    data_request = requests.get(task)
+    tasks = data_request.json()
 
-    one_employee = requests.get('{}/users/{}'.format(
-        rest_api, employee_id)).json()
-    if one_employee == {}:
-        exit()
-    username_employee = one_employee.get('username')
+    with open('{}.csv'.format(user), 'w') as file:
+        for task in tasks:
+            completed = task.get('completed')
 
-    tasks = requests.get('{}/todos'.format(rest_api)).json()
+            title_task = task.get('title')
 
-    employee_tasks = []
-    for task in tasks:
-        if task.get('userId') == employee_id:
-            employee_tasks.append(task)
-
-    with open('{}.csv'.format(employee_id), 'w', newline='') as file:
-        file_writer = csv.file_writer(file, quoting=csv.QUOTE_NONNUMERIC)
-
-        for task in employee_tasks:
-            file_writer.writerow([
-                "{}".format(employee_id), "{}".format(username_employee),
-                "{}".format(task.get('completed')),
-                "{}".format(task.get('title'))])
+            file.write('"{}","{}","{}","{}"\n'.format(
+                user, employee_id, completed, title_task))

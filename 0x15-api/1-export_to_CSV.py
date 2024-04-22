@@ -6,8 +6,8 @@ import requests
 from sys import argv
 
 if __name__ == '__main__':
-    user = argv[1]
-    rest_api__user = 'https://jsonplaceholder.typicode.com/users/' + user
+    employee = argv[1]
+    rest_api__user = 'https://jsonplaceholder.typicode.com/users/' + employee
     data_request = requests.get(rest_api__user)
 
     employee_id = data_request.json().get('username')
@@ -15,11 +15,11 @@ if __name__ == '__main__':
     data_request = requests.get(task)
     tasks = data_request.json()
 
-    with open('{}.csv'.format(user), 'w') as file:
+    with open('{}.csv'.format(employee), 'w') as file:
         for task in tasks:
             completed = task.get('completed')
 
             title_task = task.get('title')
 
             file.write('"{}","{}","{}","{}"\n'.format(
-                user, employee_id, completed, title_task))
+                employee, employee_id, completed, title_task))

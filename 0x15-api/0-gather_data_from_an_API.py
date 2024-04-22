@@ -11,23 +11,19 @@ rest_api = "https://jsonplaceholder.typicode.com"
 if __name__ == '__main__':
     if len(argv) > 1:
         if re.fullmatch(r'\d+', argv[1]):
-            employee_id = int(argv[1])
-            data_request = requests.get('{}/users/{}'.format(
-                rest_api, employee_id)).json()
-            tasks_request = requests.get('{}/todos'.format(
-                rest_api)).json()
-            employee_name = data_request.get('name')
-            tasks = list(filter(
-                lambda t: t.get('userId') == employee_id, tasks_request))
-            completed_list_tasks = list(
-                filter(lambda a: a.get('completed'), tasks))
+            id = int(argv[1])
+            data_requests = requests.get('{}/users/{}'.format(rest_api, id)).json()
+            task_requests = requests.get('{}/todos'.format(rest_api)).json()
+            employee_name = data_requests.get('name')
+            employee_tasks = list(filter(lambda x: x.get('userId') == id, task_requests))
+            completed_tasks = list(filter(lambda x: x.get('completed'), employee_tasks))
             print(
                 'Employee {} is done with tasks({}/{}):'.format(
                     employee_name,
-                    len(completed_list_tasks),
-                    len(tasks)
+                    len(completed_tasks),
+                    len(employee_tasks)
                 )
             )
-            if len(completed_list_tasks) > 0:
-                for task in completed_list_tasks:
+            if len(completed_tasks) > 0:
+                for task in completed_tasks:
                     print('\t {}'.format(task.get('title')))

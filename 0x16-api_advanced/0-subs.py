@@ -8,12 +8,9 @@ def number_of_subscribers(subreddit):
     """Invalid subreddits may return a redirect to search results.
     Ensure that you are not following redirects"""
 
+    url = "https://www.reddit.com/r/{}/about.json".format(subreddit)
     headers = {'User-Agent': 'Chrome/6.0'}
-    request = requests.get(
-        "https://www.reddit.com/r/{}/about.json".format(subreddit),
-        headers=headers)
-
-    if request.status_code == 200:
-        subscribers = request.json().get('data').get('subscribers')
-        return subscribers if subscribers else 0
+    response = requests.get(url, headers=headers, allow_redirects=False)
+    if response.status_code == 200:
+        return response.json().get("data").get("subscribers")
     return 0

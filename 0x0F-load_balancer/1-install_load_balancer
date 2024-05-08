@@ -2,7 +2,7 @@
 # install load balancer
 
 function install() {
-	command -v "$1" &> /dev/null
+command -v "$1" &> /dev/null
 
 	#shellcheck disable=SC2181
 	if [ $? -ne 0 ]; then

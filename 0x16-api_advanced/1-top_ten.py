@@ -9,7 +9,7 @@ def top_ten(subreddit):
     Ensure that you are not following redirects"""
 
     url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
-    headers = {'User-Agent': 'Chrome/6.0'}
+    headers = {'User-Agent': 'SubsPythonScript/1.0'}
     response = requests.get(url, headers=headers, allow_redirects=False)
     if response.status_code == 200:
         for i in range(10):

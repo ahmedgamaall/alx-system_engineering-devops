@@ -10,7 +10,7 @@ def count_words(subreddit, word_list, after=None, word_dict={}):
     """Invalid subreddits may return a redirect to search results.
     Ensure that you are NOT following redirects"""
     url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
-    headers = {'User-Agent': 'Chrome/6.0'}
+    headers = {'User-Agent': 'SubsPythonScript/1.0'}
     params = {'limit': 100, 'after': after}
     response = requests.get(url, headers=headers, params=params,
                             allow_redirects=False)

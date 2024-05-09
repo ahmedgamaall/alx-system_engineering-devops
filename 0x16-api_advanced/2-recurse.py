@@ -8,7 +8,7 @@ def recurse(subreddit, hot_list=[], a=""):
     """Invalid subreddits may return a redirect to search results.
     Ensure that you are not following redirects."""
 
-    headers = {'User-Agent': 'Chrome/6.0'}
+    headers = {'User-Agent': 'SubsPythonScript/1.0'}
     url = f'https://www.reddit.com/r/{subreddit}/hot.json?limit=100&after={a}'
     request = requests.get(url=url, headers=headers, allow_redirects=False)
     if request.status_code != 200:
